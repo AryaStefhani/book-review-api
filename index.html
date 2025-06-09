@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Review Buku</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f6f6f6;
+      padding: 20px;
+    }
+    .review-card {
+      background: white;
+      padding: 16px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      display: flex;
+      gap: 16px;
+    }
+    .review-card img {
+      width: 120px;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+    .review-content {
+      flex: 1;
+    }
+    .review-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .review-rating {
+      color: #f39c12;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Daftar Review Buku</h1>
+  <div id="review-container"></div>
+
+  <script>
+    fetch('http://localhost:3000/api/reviews/')
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById('review-container');
+
+        data.forEach(review => {
+          const card = document.createElement('div');
+          card.className = 'review-card';
+
+          card.innerHTML = `
+            <img src="${review.gambar}" alt="Gambar Buku">
+            <div class="review-content">
+              <div class="review-title">${review.judul}</div>
+              <div class="review-text">${review.ulasan}</div>
+              <div class="review-rating">Rating: ${review.rating}/5</div>
+            </div>
+          `;
+
+          container.appendChild(card);
+        });
+      })
+      .catch(error => {
+        document.getElementById('review-container').innerHTML = '<p>Gagal memuat review.</p>';
+        console.error('❌ Error mengambil review:', error);
+      });
+  </script>
+</body>
+</html>
